@@ -1,0 +1,87 @@
+{
+
+"BEGIN": {
+	"nodename": "BEGIN",
+	"state": "[subject.name] walked into the coffee shop."
+	},
+
+"CUTLINE": {
+	"nodename": "CUTLINE",
+	"state":"[subject.name] cut [victim.name], the first person in line."
+	},
+"STEPFOOT": {
+	"nodename": "STEPFOOT",
+	"state":"Clumsily, [subject.name] stepped on [victim.name]'s foot."
+	},
+
+
+"CUTBACK": {
+	"nodename": "CUTBACK",
+	"state":"[victim.name] stepped back in front of [subject.name]."
+	},
+"EXCUSEME": {
+	"nodename": "EXCUSEME",
+	"state":"[victim.name] was really annoyed and said, 'Excuse me?!"
+	},
+
+
+"SHOVE": {
+	"nodename": "SHOVE",
+	"state":"[subject.name] proceeded to shove [victim.name]."
+	},
+"SUBJECTSTARES": {
+	"nodename": "SUBJECTSTARES",
+	"state":"[subject.name] turned to [victim.name] and gave a very mean look."
+	},
+
+
+"XSTARE": {
+	"nodename": "XSTARE",
+	"state": "[victim.name] stared with rage into [subject.name]'s eyes."
+	},
+"XSHOVE": {
+	"nodename": "XSHOVE",
+	"state": "In retaliation, [victim.name] pushed [subject.name]."
+	},
+"YELL": {
+	"nodename": "YELL",
+	"state": "[victim.name] yelled, 'Hey! Relax."
+	},
+
+
+"DRINKSPLASH": {
+	"nodename": "DRINKSPLASH",
+	"state":"[subject.name] splashed a coffee into [victim.name]'s face."
+	},
+"DESERTCRUMBLE": {
+	"nodename": "DESERTCRUMBLE",
+	"state":"[subject.name] crumbled a muffin above [victim.name]'s head."
+	},
+
+
+"POLICEORDERS": {
+	"nodename": "POLICEORDERS",
+	"state":"Immediately the bystanding police officer ordered [subject.name] to leave."
+	},
+"BARISTAORDERS": {
+	"nodename": "BARISTAORDERS",
+	"state":"The barista ran out from behind the counter and ordered [subject.name] to leave."
+	},
+
+
+"LOVEJUICE": {
+	"nodename": "LOVEJUICE",
+	"state":"[subject.name] ran out yelling 'Juice is better, anyway!"
+	},
+"HATECOFFEE": {
+	"nodename": "HATECOFFEE",
+	"state":"[subject.name] stormed out of the coffee shop yelling 'I hate coffee!"
+	},
+
+
+"END": {
+	"nodename": "END",
+	"state":"The barista handed [victim.name] a bunch of napkins and gave [victim.name] a free drink out of sympathy."
+	}
+
+}

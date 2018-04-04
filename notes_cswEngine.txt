@@ -1,0 +1,13 @@
+got rid of [roles] in node, need it for check_fillers_differ 
+
+
+currently: 
+exp.get_next_edge(fromnode) -> fromnode.get_outE_conditional(RFC)
+where get_outE_conditional returns two lists [tonode_name],[conditional_pr]
+where these two lists are used in get_next_edge
+
+want:
+want: node.get_outE(RFC) to return a distribution: pr(tonode|RFC)
+node.get_outE_pr(RFC) = {tonode:pr}
+then use node.outE_pr.keys() and node.outE_pr.values()
+

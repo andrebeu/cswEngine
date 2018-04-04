@@ -1,0 +1,99 @@
+{
+
+"BEGIN": {
+	"pr": {
+		"subject.violent.true": {"CUTLINE": 0.8, "STEPFOOT": 0.2},
+		"subject.violent.false": {"CUTLINE": 0.2, "STEPFOOT":0.8}}
+	},
+
+
+"CUTLINE": {
+	"pr": {
+		"subject.violent.true": {"CUTBACK" : 1.0},
+		"subject.violent.false": {"CUTBACK": 1.0}}
+	},
+"STEPFOOT": {
+	"pr": {
+		"subject.violent.true": {"EXCUSEME": 1.0},
+		"subject.violent.false": {"EXCUSEME": 1.0}}
+	},
+
+
+"CUTBACK": {
+	"pr": {
+		"subject.violent.true": {"SHOVE": 0.8, "SUBJECTSTARES": 0.2},
+		"subject.violent.false": {"SHOVE": 0.2, "SUBJECTSTARES": 0.8}}
+	},
+"EXCUSEME": {
+	"pr": {"subject.violent.true": {"SHOVE": 0.8, "SUBJECTSTARES": 0.2},
+		   "subject.violent.false": {"SHOVE": 0.2, "SUBJECTSTARES": 0.8}}
+	},
+
+
+"SHOVE": {
+	"pr": {"subject.violent.true": {"XSHOVE": 0.0, "YELL": 0.2, "XSTARE": 0.8},
+		   "subject.violent.false": {"XSHOVE": 0.8, "YELL": 0.2, "XSTARE": 0.0}}
+	},
+"SUBJECTSTARES": {
+	"pr": {"subject.violent.true": {"XSHOVE": 0.0, "YELL": 0.2, "XSTARE": 0.8},
+		   "subject.violent.false": {"XSHOVE": 0.8, "YELL": 0.2, "XSTARE": 0.0}}
+	},
+
+
+"XSHOVE": {
+	"pr": {
+		"subject.violent.true": {"DESERTCRUMBLE": 0.2, "DRINKSPLASH": 0.8},
+		"subject.violent.false": {"DESERTCRUMBLE": 0.8, "DRINKSPLASH": 0.2}}
+	},
+"YELL": {
+	"pr": {
+		"subject.violent.true": {"DESERTCRUMBLE": 0.2, "DRINKSPLASH": 0.8},
+		"subject.violent.false": {"DESERTCRUMBLE": 0.8, "DRINKSPLASH": 0.2}}
+	},
+"XSTARE": {
+	"pr": {
+		"subject.violent.true": {"DESERTCRUMBLE": 0.2, "DRINKSPLASH": 0.8},
+		"subject.violent.false": {"DESERTCRUMBLE": 0.8, "DRINKSPLASH": 0.2}}
+	},
+
+
+"DRINKSPLASH": {
+	"pr": {
+		"subject.violent.true": {"POLICEORDERS": 0.8, "BARISTAORDERS": 0.2},
+		"subject.violent.false": {"POLICEORDERS": 0.2, "BARISTAORDERS": 0.8}
+		}
+	},
+"DESERTCRUMBLE": {
+	"pr": {
+		"subject.violent.true": {"POLICEORDERS": 0.2, "BARISTAORDERS": 0.8},
+		"subject.violent.false": {"POLICEORDERS": 0.8, "BARISTAORDERS": 0.2}}
+	},
+
+
+"POLICEORDERS": {
+	"pr": {"subject.violent.true": {"LOVEJUICE": 0.8, "HATECOFFEE": 0.2},
+		   "subject.violent.false": {"LOVEJUICE": 0.2, "HATECOFFEE": 0.8}}
+	},
+"BARISTAORDERS": {
+	"pr": {
+		"subject.violent.true": {"LOVEJUICE": 0.8, "HATECOFFEE": 0.2},
+		"subject.violent.false": {"LOVEJUICE": 0.2, "HATECOFFEE": 0.8}}
+	},
+
+
+"LOVEJUICE": {
+	"pr": {"subject.violent.true": {"END": 1.0},
+			"subject.violent.false": {"END": 1.0}}
+	},
+"HATECOFFEE": {
+	"pr": {
+		"subject.violent.true": {"END": 1.0},
+		"subject.violent.false": {"END": 1.0}}
+	},
+
+
+"END":{
+	"pr": {}
+	}
+
+}
