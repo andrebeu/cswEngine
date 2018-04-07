@@ -5,7 +5,8 @@ from numpy import random
 QUESTION_PR = 0.6
 FILLER_QUESTION_PR = 0.3
 
-
+SCHEMA_FILE_PATH="fight.schema"
+STATES_FILE_PATH="fight.states"
 
 """ 
 
@@ -78,10 +79,10 @@ def read_json(path):
 
 
 def assemble_pr(pr_info,nodeD):
-  """ given string that encodes trans_prob information 
-      in schema file, return a pr object 
+  """ given string that encodes trans_prob information in schema file, 
+      return a pr object 
       e.g. {subj.viol.true: {tonode1:0.3,tonode2:0.7}, } 
-      currently just changes keys of inner dict from string to node """
+      currently just changes keys of inner dict "tonode1" from string to node object """
   pr = {}
   for cond,cond_dist in pr_info.items():
     pr[cond] = {}
@@ -94,12 +95,12 @@ def assemble_pr(pr_info,nodeD):
 init_nodeD and another function for giving extra structure to the graph
 """
 
-def make_nodeD(path1="fight.schema",path2="fight.states"):
+def make_nodeD(schema_fpath=SCHEMA_FILE_PATH,states_fpath=STATES_FILE_PATH):
   """ graph constructor 
       returns nodeD {nodename:node}
   """
-  schema_info_D = read_json(path1)
-  node_state_D = read_json(path2)
+  schema_info_D = read_json(schema_fpath)
+  node_state_D = read_json(states_fpath)
 
   ## initialize nodeD with nodes containing name and state
   nodeD = {}
@@ -137,7 +138,7 @@ class Node():
         differs between RFCs. therefore i only check if 
         different names are produced. in the furture RFCs
         should have latent and visible properties and this 
-        function would differentiate between them"""
+        function would differentiate between them """
     # list of (role,property) tuples in self.state
     roleprop_L = [rp[1:-1].split('.') for rp in re.findall('\[.*?\]',self.state)]
     for rp_tup in roleprop_L:
@@ -149,7 +150,7 @@ class Node():
   def get_cond_dist(self,RFC):
     """ given an RFC which establishes which conditions are met
         returns a conditional distribution over outgoing edges.
-        NB currently only two conditions guide transition probabilities
+        NB currently only one role.property changes transition probabilities
       """
     if RFC['subject']['violent']:
       cond_dist =  self.pr['subject.violent.true']
@@ -261,7 +262,7 @@ class Exp():
     while node.name != "END":
       # get next tonode
       # self.fixed_RFC used for unconditioned transitions
-      next_tonode = self.get_next_tonode(node,self.fixed_RFC)
+      next_tonode = self.get_next_tonode(node,RFC)
       # w.p. prQ ask question
       if (random.random() < prQ):
         question = self.get_question(node,next_tonode,RFC) # returns Question or None 
