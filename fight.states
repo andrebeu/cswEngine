@@ -2,7 +2,7 @@
 
 "BEGIN": {
 	"nodename": "BEGIN",
-	"state": "[subject.name] walked into the coffee shop."
+	"state": "One morning, [subject.name] walked into Joe's coffee shop."
 	},
 
 "CUTLINE": {
