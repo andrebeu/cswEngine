@@ -1,31 +1,37 @@
 # cswEngine
 
 
-## objects:
-* Exp
-* Path
-* RFC 
-* 
-
-
 ## CURRENT IMPLEMENTATION
-Graph and Experiment
-Graph has Node objects
-Experiment has Question objects
+* Objects: Exp, Node, Questions, RFC
 
-RFC is a dict, RF are dicts
+RFC is a dict, RFs are dicts
+
+Exp has .get_path() which returns a sequence of nodes and an RFC
+
 
 
 ## NEXT STEP
 
-richly filled experiments \
-1) work on Node object to make filling smooth \
-2) make sure questions are being easily filled
+richly filled experiments 
+* improve RFC generation
+	- RFC's will continue to only have two aggressors and one victim 
+	- now also includes: setting.name, victim.emotion, victim.yell, victim.type, drink1.name, drink2.name, drink3.name, dessert.name
+* work on Node object to automate filling 
+* make sure questions are being appropriately filled
 
 
 ## NOTES
 
 * RFC
+now there are only two fillers victim and aggressor 
+want richly filled
+
+```
+richly filled: more roles and fillers
+roles that alter transition probabilities are consequential, roles that don't are innocuous.
+
+```
+
 want .get_info() returns str with info about the entities in RFC
 .query(condition) returns true or false.
 currently encoding as a string with the info of role.property.bool
