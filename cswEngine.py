@@ -185,12 +185,14 @@ class Node():
         should have latent and visible properties and this 
         function would differentiate between them """
     # list of (role,property) tuples in self.state
-    roleprop_L = [rp[1:-1].split('.') for rp in re.findall('\[.*?\]',self.state)]
-    for rp_tup in roleprop_L:
-      role,prop = rp_tup
-      if RFC1[role]['name'] != RFC2[role]['name']:
-        return True
-    return False
+    return self.get_filled_state(RFC1) == self.get_filled_state(RFC2)
+
+    # roleprop_L = [rp[1:-1].split('.') for rp in re.findall('\[.*?\]',self.state)]
+    # for rp_tup in roleprop_L:
+    #   role,prop = rp_tup
+    #   if RFC1[role]['name'] != RFC2[role]['name']:
+    #     return True
+    # return False
 
   def get_cond_dist(self,RFC):
     """ given an RFC, which establishes which conditions are met,
@@ -203,8 +205,6 @@ class Node():
       cond_dist =  self.pr['subject.violent.false']
     return cond_dist
   
-  """ currently only filling subject name and victim name
-  need to detect what needs filling and fill"""
   def get_filled_state(self,RFC):
     """ fills a node's state with given RFC
         returns the resulting string
