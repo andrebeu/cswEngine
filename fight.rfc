@@ -12,14 +12,14 @@
 "filler_properties": {
 	"person1": {
 		"name":"Bill",
-		"violent":"True",
+		"violent":true,
 		"emotion":"rage",
 		"yell":"I hate coffee!",
 		"type":"nurse"
 		},
 	"person2": {
 		"name":"Silvia",
-		"violent":"True",
+		"violent":true,
 		"emotion":"rage2",
 		"yell":"I hate coffee2!",
 		"type":"doctor"
@@ -27,11 +27,11 @@
 
 	"person3": {
 		"name":"Adam",
-		"violent":"True"
+		"violent":true
 		},
 	"person4": {
 		"name":"Olivia",
-		"violent":"False"
+		"violent":false
 		},
 
 

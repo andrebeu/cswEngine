@@ -51,6 +51,7 @@ def get_filler_properties(RFC_str,filler_properties_D):
   for role,filler in RFC_str.items():
     property_D = filler_properties_D[filler]
     RFC_dict[role] = property_D
+    # print(property_D)
   return RFC(**RFC_dict)
 
 
@@ -119,9 +120,9 @@ def get_RFC_bag(require,RFC_FILE_PATH=RFC_FILE_PATH):
   if require == 'richly filled':
     # full combinatorials
     RFC_bag = RFC_bag_full
-  elif require == 'subject and victim':
+  elif require == 'subjvict':
     # two subjects and two victims
-    RFC_bag = get_subj_vict_bag(RFC_bag_full)
+    RFC_bag = get_subjvict_bag(RFC_bag_full)
   elif require == 'poorly filled':
     # two subjects one victim
     RFC_bag = get_poor_filled_bag(RFC_bag_full)
@@ -131,7 +132,7 @@ def get_RFC_bag(require,RFC_FILE_PATH=RFC_FILE_PATH):
   return RFC_bag
 
 
-def get_subj_vict_bag(RFC_bag_full):
+def get_subjvict_bag(RFC_bag_full):
   """ bag with two subjects two victims
   """
   RFC_bag = []
@@ -319,7 +320,7 @@ class TransitionQ(Question):
 
 class Exp():
 
-  def __init__(self,RFC_bag=get_RFC_bag('subject and victim'),
+  def __init__(self,RFC_bag=get_RFC_bag('subjvict'),
     nodeD=make_nodeD()):
     # initialize nodeD, edgeD and RFC
     self.nodes = nodeD # {nodename:node}

@@ -141,6 +141,7 @@ def write_mturk_taskscript(code_body,timeline,fpath):
 	# write taskscript
 	jsexp_file_out = open(fpath,'w')
 	jsexp_file_out.write(jsexp_str)
+	jsexp_file_out.close()
 	return None
 
 
