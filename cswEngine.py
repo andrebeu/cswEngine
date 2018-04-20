@@ -29,34 +29,34 @@ def read_json(path):
 
 ### RFC initialization
 
-  def sample_fillers(schema_role_fillers_D):
-    """ unused - gets a random RFC_str
-    given a dict with roles that must be filled by this schema
-    and the fillers that could fill that role, return a dict of which
-    filler will fill each role. e.g: 
-    given schema_role_fillers_D (dict of "role": ["available fillers"])
-    returns RFC_str {"role": "filler"}
-    """
-    RFC_str = {}
-    for role,available_fillers in schema_role_fillers_D.items():
-      RFC_str[role] = random.choice(available_fillers)
-    return RFC_str
+def sample_fillers(schema_role_fillers_D):
+  """ unused - gets a random RFC_str
+  given a dict with roles that must be filled by this schema
+  and the fillers that could fill that role, return a dict of which
+  filler will fill each role. e.g: 
+  given schema_role_fillers_D (dict of "role": ["available fillers"])
+  returns RFC_str {"role": "filler"}
+  """
+  RFC_str = {}
+  for role,available_fillers in schema_role_fillers_D.items():
+    RFC_str[role] = random.choice(available_fillers)
+  return RFC_str
 
-  def get_filler_properties(RFC_str,filler_properties_D):
-    """ replaces "filler" for {property:value} in RFC_str to make RFC:
-    given RFC_str {"role": "filler"} and filler_property_D {"filler":"property_D"}
-    returns RFC object {role: {"filler":"proerty"} }
-    """
-    RFC_dict = {}
-    for role,filler in RFC_str.items():
-      property_D = filler_properties_D[filler]
-      RFC_dict[role] = property_D
-    return RFC(**RFC_dict)
+def get_filler_properties(RFC_str,filler_properties_D):
+  """ replaces "filler" for {property:value} in RFC_str to make RFC:
+  given RFC_str {"role": "filler"} and filler_property_D {"filler":"property_D"}
+  returns RFC object {role: {"filler":"proerty"} }
+  """
+  RFC_dict = {}
+  for role,filler in RFC_str.items():
+    property_D = filler_properties_D[filler]
+    RFC_dict[role] = property_D
+  return RFC(**RFC_dict)
 
 
 class RFC(dict):
-  def __init__(self,subject,victim,setting,
-                drink1,drink2,drink3,dessert):
+
+  def __init__(self,subject,victim,setting,drink1,drink2,drink3,dessert):
     """ RFC implemented as dict object
         each RF is also a dict with arbitrary number of properties
         (e.g. {name:bill,violent:true})
@@ -69,94 +69,106 @@ class RFC(dict):
     self['drink3'] = drink3
     self['dessert'] = dessert
 
-  # def __str__(self):
-  #   """ returns a string that uniquely identifies this RFC 
-  #       i think this is used to keep track of RFCs in experiment
-  #       e.g. subject-bill_victim-jane 
-  #   """
-  #   return "-".join(["%s.%s" %(k,self[k]['name']) for k in self.keys()]).lower()
-
-
-  def make_RFC_bag_full(schema_role_fillers_D,filler_properties_D):
-    """ makes every possible RFC
-    role_filler_str_L: [["role1-filler1","role1-filler2"],["role2-filler1","role2-filler2"]...]
-    all_role_fillers: [("role1-filler1","role2-filler1"),("role1-filler2","role2-filler2")]
-    RFC_str: {'role':'filler',}
-    which I can pass to get_filler_properties, 
+  def __str__(self):
+    """ returns a string that uniquely identifies this RFC 
+        this is used to keep track of RFCs in .js mturk script
+        e.g. subject-bill_victim-jane 
     """
-    # 1 make_role_filler_str_L
-    role_filler_str_L = []
-    for role,filler_L in schema_role_fillers_D.items():
-      role_L = []
-      for filler in filler_L:
-        role_filler_str = "%s-%s"%(role,filler)
-        role_L.append(role_filler_str)
-      role_filler_str_L.append(role_L)
-    # 2 all_role_filers
-    all_RFC_tups = list(itertools.product(*role_filler_str_L))
-    # 3 RFC_str
-    RFC_bag_full = []
-    for RFC_str_tup in all_RFC_tups:
-      RFC_str = {rf_str.split('-')[0]:rf_str.split('-')[1] for rf_str in RFC_str_tup}
-      RFC = get_filler_properties(RFC_str,filler_properties_D) 
-      RFC_bag_full.append(RFC)
-    return RFC_bag_full
+    rfc_print = "subject-%s_victim-%s" %(
+      self['subject']['name'],self['victim']['name'])
+
+    return rfc_print
+    # return "-".join(["%s.%s" %(k,self[k]['name']) for k in self.keys()]).lower()
 
 
-  def get_RFC_bag(require,RFC_FILE_PATH=RFC_FILE_PATH):
-    """makes a bag of RFCs 
-    given path to roles file, where role-filler information is stored
-    and the requirements that need to be met by this bag
-    """
-    schema_role_fillers_D = read_json(RFC_FILE_PATH)['schema_role_fillers']
-    filler_properties_D = read_json(RFC_FILE_PATH)['filler_properties']
-    RFC_bag_full = make_RFC_bag_full(schema_role_fillers_D,filler_properties_D)
-    random.shuffle(RFC_bag_full)
-    if require == 'richly filled':
-      # full combinatorials
-      RFC_bag = RFC_bag_full
-    elif require == 'subject and victim':
-      # two subjects and two victims
-      RFC_bag = get_subj_vict_bag(RFC_bag_full)
-    elif require == 'poorly filled':
-      # two subjects one victim
-      RFC_bag = get_poor_filled_bag(RFC_bag_full)
-    else:
-      assert False, "requirement not supported: richly filled, poorly filled, subject and victim"
-    random.shuffle(RFC_bag)
-    return RFC_bag
+def make_RFC_bag_full(schema_role_fillers_D,filler_properties_D):
+  """ makes bag every possible RFC
+  role_filler_str_L: [["role1-filler1","role1-filler2"],["role2-filler1","role2-filler2"]...]
+  all_role_fillers: [("role1-filler1","role2-filler1"),("role1-filler2","role2-filler2")]
+  RFC_str: {'role':'filler',}
+  which I can pass to get_filler_properties, 
+  """
+  # 1 make_role_filler_str_L
+  role_filler_str_L = []
+  for role,filler_L in schema_role_fillers_D.items():
+    role_L = []
+    for filler in filler_L:
+      role_filler_str = "%s-%s"%(role,filler)
+      role_L.append(role_filler_str)
+    role_filler_str_L.append(role_L)
+  # 2 all_role_filers
+  all_RFC_tups = list(itertools.product(*role_filler_str_L))
+  # 3 RFC_str
+  RFC_bag_full = []
+  for RFC_str_tup in all_RFC_tups:
+    RFC_str = {rf_str.split('-')[0]:rf_str.split('-')[1] for rf_str in RFC_str_tup}
+    RFC = get_filler_properties(RFC_str,filler_properties_D) 
+    RFC_bag_full.append(RFC)
+  return RFC_bag_full
 
-  def get_subj_vict_bag(RFC_bag_full):
-    """ bag with two subjects two victims
-    """
-    RFC_bag = []
-    vict_names = ['Bill','Silvia']
-    subj_names = ['Adam','Olivia']
-    random.shuffle(subj_names)
 
-    for i,j in set(itertools.permutations([0,0,1,1],2)):
-      for RFC in RFC_bag_full:
-        if RFC['subject']['name'] == subj_names[i]: 
-            if RFC['victim']['name'] == vict_names[j]:
-              RFC_bag.append(RFC)
-              break
-    return RFC_bag
+def get_RFC_bag(require,RFC_FILE_PATH=RFC_FILE_PATH):
+  """makes a bag of RFCs 
+  given path to roles file, where role-filler information is stored
+  and the requirements that need to be met by this bag
+  """
+  schema_role_fillers_D = read_json(RFC_FILE_PATH)['schema_role_fillers']
+  filler_properties_D = read_json(RFC_FILE_PATH)['filler_properties']
+  RFC_bag_full = make_RFC_bag_full(schema_role_fillers_D,filler_properties_D)
+  random.shuffle(RFC_bag_full)
+  if require == 'richly filled':
+    # full combinatorials
+    RFC_bag = RFC_bag_full
+  elif require == 'subject and victim':
+    # two subjects and two victims
+    RFC_bag = get_subj_vict_bag(RFC_bag_full)
+  elif require == 'poorly filled':
+    # two subjects one victim
+    RFC_bag = get_poor_filled_bag(RFC_bag_full)
+  else:
+    assert False, "requirement not supported: richly filled, poorly filled, subject and victim"
+  random.shuffle(RFC_bag)
+  return RFC_bag
 
-  def get_poor_filled_bag(RFC_bag_full):
-    """ bag with two subjects, same victim
-    """
-    RFC_bag = []
-    vict_names = ['Bill','Silvia']
-    subj_names = ['Adam','Olivia']
-    random.shuffle(subj_names)
 
-    for i in [0,1]:
-      for RFC in RFC_bag_full:
-        if RFC['subject']['name'] == subj_names[0]: 
-            if RFC['victim']['name'] == vict_names[i]:
-              RFC_bag.append(RFC)
-              break
-    return RFC_bag
+def get_subj_vict_bag(RFC_bag_full):
+  """ bag with two subjects two victims
+  """
+  RFC_bag = []
+  vict_names = ['Bill','Silvia']
+  subj_names = ['Adam','Olivia']
+  random.shuffle(subj_names)
+
+  # get 4 RFCs, each with different subj,vict combination
+  for i,j in set(itertools.permutations([0,0,1,1],2)):
+    for RFC in RFC_bag_full:
+      if RFC['subject']['name'] == subj_names[i]: 
+          if RFC['victim']['name'] == vict_names[j]:
+            RFC_bag.append(RFC)
+            break
+  # make all RFCs have every other filler in common
+  RFC1 = RFC_bag[0]
+  for RFC in RFC_bag[1:]:
+    for role in RFC1.keys(): 
+      if role not in ['victim','subject']:
+        RFC[role] = RFC1[role] 
+  return RFC_bag
+
+def get_poor_filled_bag(RFC_bag_full):
+  """ bag with two subjects, same victim
+  """
+  RFC_bag = []
+  vict_names = ['Bill','Silvia']
+  subj_names = ['Adam','Olivia']
+  random.shuffle(subj_names)
+
+  for i in [0,1]:
+    for RFC in RFC_bag_full:
+      if RFC['subject']['name'] == subj_names[0]: 
+          if RFC['victim']['name'] == vict_names[i]:
+            RFC_bag.append(RFC)
+            break
+  return RFC_bag
 
 
 
@@ -175,24 +187,18 @@ class Node():
 
   __repr__ = __str__
 
-  """ use node.get_filled_state(RFC) here """
   def check_filled_states_differ(self,RFC1,RFC2):
-    """ if the node's output sentences look different
-        under the two RFCs, return True 
-        NB currently, name is only surface property that 
-        differs between RFCs. therefore i only check if 
-        different names are produced. in the furture RFCs
-        should have latent and visible properties and this 
-        function would differentiate between them """
+    """ if the node's output sentences have different 
+    subject or victim under the two RFCs, return True
+    """
     # list of (role,property) tuples in self.state
-    return self.get_filled_state(RFC1) == self.get_filled_state(RFC2)
-
-    # roleprop_L = [rp[1:-1].split('.') for rp in re.findall('\[.*?\]',self.state)]
-    # for rp_tup in roleprop_L:
-    #   role,prop = rp_tup
-    #   if RFC1[role]['name'] != RFC2[role]['name']:
-    #     return True
-    # return False
+    roleprop_L = [rp[1:-1].split('.') for rp in re.findall('\[.*?\]',self.state)]
+    for rp_tup in roleprop_L:
+      role,prop = rp_tup
+      if RFC1[role]['name'] != RFC2[role]['name']:
+        if role == 'victim' or role == 'subject':
+          return True
+    return False
 
   def get_cond_dist(self,RFC):
     """ given an RFC, which establishes which conditions are met,
@@ -204,7 +210,7 @@ class Node():
     else: 
       cond_dist =  self.pr['subject.violent.false']
     return cond_dist
-  
+
   def get_filled_state(self,RFC):
     """ fills a node's state with given RFC
         returns the resulting string
@@ -220,40 +226,40 @@ class Node():
 
 ## graph constructing: graph is just a dict of nodes
 
-  def assemble_pr(pr_info,nodeD):
-    """ given string that encodes trans_prob information in schema file, 
-        return a pr object. e.g. {subj.viol.true: {tonode1:0.3,tonode2:0.7}, } 
-        currently just changes keys of inner dict from string "tonode1" to node object """
-    pr = {}
-    for cond,cond_dist in pr_info.items():
-      pr[cond] = {}
-      for tonode_name,probability in cond_dist.items():
-        tonode = nodeD[tonode_name]
-        pr[cond][tonode] = probability
-    return pr
+def assemble_pr(pr_info,nodeD):
+  """ given string that encodes trans_prob information in schema file, 
+      return a pr object. e.g. {subj.viol.true: {tonode1:0.3,tonode2:0.7}, } 
+      currently just changes keys of inner dict from string "tonode1" to node object """
+  pr = {}
+  for cond,cond_dist in pr_info.items():
+    pr[cond] = {}
+    for tonode_name,probability in cond_dist.items():
+      tonode = nodeD[tonode_name]
+      pr[cond][tonode] = probability
+  return pr
 
 
-  def make_nodeD(schema_fpath=SCHEMA_FILE_PATH,states_fpath=STATES_FILE_PATH):
-    """ graph constructor 
-      returns nodeD {nodename:node}
+def make_nodeD(schema_fpath=SCHEMA_FILE_PATH,states_fpath=STATES_FILE_PATH):
+  """ graph constructor 
+    returns nodeD {nodename:node}
 
-        break this into two functions?
-      init_nodeD and another function for giving extra structure to the graph
-    """
-    schema_info_D = read_json(schema_fpath)
-    node_state_D = read_json(states_fpath)
+      break this into two functions?
+    init_nodeD and another function for giving extra structure to the graph
+  """
+  schema_info_D = read_json(schema_fpath)
+  node_state_D = read_json(states_fpath)
 
-    ## initialize nodeD with nodes containing name and state
-    nodeD = {}
-    for node_name in node_state_D.keys():
-      node_state = node_state_D[node_name]['state']
-      nodeD[node_name] = Node(name=node_name, state=node_state)
+  ## initialize nodeD with nodes containing name and state
+  nodeD = {}
+  for node_name in node_state_D.keys():
+    node_state = node_state_D[node_name]['state']
+    nodeD[node_name] = Node(name=node_name, state=node_state)
 
-    ## include pr in nodes
-    for fromnode_name,node_info in schema_info_D.items():
-      fromnode = nodeD[fromnode_name]
-      fromnode.pr = assemble_pr(node_info['pr'],nodeD)
-    return nodeD
+  ## include pr in nodes
+  for fromnode_name,node_info in schema_info_D.items():
+    fromnode = nodeD[fromnode_name]
+    fromnode.pr = assemble_pr(node_info['pr'],nodeD)
+  return nodeD
 
 
 
@@ -287,7 +293,6 @@ class Question():
     false_next = self.false_tonode.get_filled_state(self.false_RFC)
     return {'true_next':true_next,'false_next':false_next}
 
-
 class FillerQ(Question):
   """ has false RFC 
   """
@@ -298,7 +303,6 @@ class FillerQ(Question):
     self.type = 'fillerQ'
     self.false_RFC = qinfo['false_RFC']
     self.false_tonode = self.true_tonode
-
 
 class TransitionQ(Question):
   """ has false tonode 
@@ -312,12 +316,11 @@ class TransitionQ(Question):
     self.false_RFC = self.true_RFC
 
 
-## experiemnt
-
 
 class Exp():
 
-  def __init__(self,nodeD=make_nodeD(),RFC_bag=None):
+  def __init__(self,RFC_bag=get_RFC_bag('subject and victim'),
+    nodeD=make_nodeD()):
     # initialize nodeD, edgeD and RFC
     self.nodes = nodeD # {nodename:node}
     self.RFC_bag = RFC_bag
