@@ -4,20 +4,14 @@
 ## CURRENT IMPLEMENTATION
 * Objects: Exp, Node, Questions, RFC
 
-RFC is a dict, RFs are dicts
+* RFC is a dict, RFs are dicts
 
-Exp has .get_path() which returns a sequence of nodes and an RFC
+* Exp has .get_path() which returns a sequence of nodes and an RFC
 
 
 
 ## NEXT STEP
 
-richly filled experiments 
-* improve RFC generation
-	- richly filled has several innocuous role-property combinations, therefore need way to flexibly assemble every possible RFC in RFC bag. 
-	- new file containing information about each role (properties and fillers)
-* work on Node object to automate filling 
-* make sure questions are being appropriately filled
 
 
 ## NOTES
