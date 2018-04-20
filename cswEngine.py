@@ -129,22 +129,20 @@ class Node():
     return "NodeObj.%s" % self.name
 
   __repr__ = __str__
-
-  def check_fillers_differ(self,RFC1,RFC2):
-    """ if the node's output sentences look different
-        under the two RFCs, return True 
-        NB currently, name is only surface property that 
-        differs between RFCs. therefore i only check if 
-        different names are produced. in the furture RFCs
-        should have latent and visible properties and this 
-        function would differentiate between them"""
-    # list of (role,property) tuples in self.state
-    roleprop_L = [rp[1:-1].split('.') for rp in re.findall('\[.*?\]',self.state)]
-    for rp_tup in roleprop_L:
-      role,prop = rp_tup
-      if RFC1[role]['name'] != RFC2[role]['name']:
-        return True
-    return False
+  
+  def __get_visible_role_props(self):
+    """
+        extracts from state the visible roles and properties
+        by parsing the Node state string
+        returns list of {"role": role, "property": prop} objects
+    """
+    # list of (role, prop) tuples in self.state
+    role_prop_L = [rp[1:-1].split('.') for rp in re.findall('\[.*?\]',self.state)]
+    visible_role_props = []
+    for role_prop_tuple in role_prop_L:
+      role, prop = role_prop_tuple
+      visible_role_props.append({'role': role, 'prop': prop})
+    return visible_role_props
 
   def get_cond_dist(self,RFC):
     """ given an RFC which establishes which conditions are met
@@ -158,13 +156,18 @@ class Node():
     return cond_dist
   
   def get_filled_state(self,RFC):
-    """ fills a node's state with given RFC
+    """ 
+        replace [role.property] substrings of state with RFC[role][property]
         returns the resulting string
-        NB currently only two fillers
     """
     filled_state = self.state
-    filled_state = re.sub('\[subject.name\]',RFC['subject']['name'],filled_state)
-    filled_state = re.sub('\[victim.name\]',RFC['victim']['name'],filled_state)
+    for role_prop in self.__get_visible_role_props():
+      role = role_prop['role']
+      prop = role_prop['prop']
+      old_substring = '\[{}.{}\]'.format(role, prop)
+      # casting to string means this won't break for e.g. boolean properties
+      new_substring = str(RFC[role][prop])
+      filled_state = re.sub(old_substring, new_substring, filled_state)
     return filled_state
 
 
@@ -301,7 +304,7 @@ class Exp():
     random.shuffle(self.RFC_bag)
     # look for RFC which produces different filled sentences for tonode
     for false_RFC in self.RFC_bag:
-      if tonode.check_fillers_differ(true_RFC,false_RFC):
+      if tonode.get_filled_state(true_RFC) != tonode.get_filled_state(false_RFC):
         return FillerQ(fromnode=fromnode,true_tonode=tonode,
                        true_RFC=true_RFC,false_RFC=false_RFC)
     return None
