@@ -1,0 +1,65 @@
+{
+"schema_role_fillers": {
+		"setting":["setting1"],
+		"victim":["person1","person2"],
+		"subject":["person3","person4"],
+		"drink1":["tea1","tea2","coffee"],
+		"drink2":["tea1","tea2","coffee"],
+		"drink3":["tea1","tea2","coffee"],
+		"dessert":["dessert1","dessert2"]
+	},
+
+"filler_properties": {
+	"person1": {
+		"name":"Bill",
+		"violent":"True",
+		"emotion":"rage",
+		"yell":"I hate coffee!",
+		"type":"nurse"
+		},
+	"person2": {
+		"name":"Silvia",
+		"violent":"True",
+		"emotion":"rage2",
+		"yell":"I hate coffee2!",
+		"type":"doctor"
+		},
+
+	"person3": {
+		"name":"Adam",
+		"violent":"True"
+		},
+	"person4": {
+		"name":"Olivia",
+		"violent":"False"
+		},
+
+
+	"setting1": {
+		"name":"Joe's coffee shop"
+		},
+
+	"tea1": {
+		"name":"green tea"
+		},
+	"tea2": {
+		"name":"black tea"
+		},
+	"coffee": {
+		"name":"coffee"
+		},
+
+	"dessert1": {
+		"name":"cookie"
+		},
+	"dessert2": {
+		"name":"cake"
+		}
+	}
+}
+
+
+
+
+
+
