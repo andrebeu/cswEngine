@@ -2,12 +2,12 @@
 
 "BEGIN": {
 	"nodename": "BEGIN",
-	"state": "[subject.name] walked into the coffee shop."
+	"state": "One morning, [subject.name] walked into [setting.name]."
 	},
 
 "CUTLINE": {
 	"nodename": "CUTLINE",
-	"state":"[subject.name] cut [victim.name], the first person in line."
+	"state":"[subject.name] cut [victim.name], the local [victim.type]."
 	},
 "STEPFOOT": {
 	"nodename": "STEPFOOT",
@@ -17,11 +17,11 @@
 
 "CUTBACK": {
 	"nodename": "CUTBACK",
-	"state":"[victim.name] stepped back in front of [subject.name]."
+	"state":"[victim.name] hurried back in front of [subject.name]."
 	},
 "EXCUSEME": {
 	"nodename": "EXCUSEME",
-	"state":"[victim.name] was really annoyed and said, 'Excuse me?!"
+	"state":"[victim.name] was [victim.emotion] and said, 'Excuse me?!"
 	},
 
 
@@ -45,17 +45,17 @@
 	},
 "YELL": {
 	"nodename": "YELL",
-	"state": "[victim.name] yelled, 'Hey! Relax."
+	"state": "[victim.name] yelled, '[victim.yell]'"
 	},
 
 
 "DRINKSPLASH": {
 	"nodename": "DRINKSPLASH",
-	"state":"[subject.name] splashed a coffee into [victim.name]'s face."
+	"state":"[subject.name] splashed a [drink1.name] into [victim.name]'s face."
 	},
 "DESERTCRUMBLE": {
 	"nodename": "DESERTCRUMBLE",
-	"state":"[subject.name] crumbled a muffin above [victim.name]'s head."
+	"state":"[subject.name] crumbled a [dessert.name] above [victim.name]'s head."
 	},
 
 
@@ -71,17 +71,17 @@
 
 "LOVEJUICE": {
 	"nodename": "LOVEJUICE",
-	"state":"[subject.name] ran out yelling 'Juice is better, anyway!"
+	"state":"[subject.name] ran out yelling '[drink3.name] is better, anyway!'"
 	},
 "HATECOFFEE": {
 	"nodename": "HATECOFFEE",
-	"state":"[subject.name] stormed out of the coffee shop yelling 'I hate coffee!"
+	"state":"[subject.name] stormed out yelling 'I hate [drink2.name]!"
 	},
 
 
 "END": {
 	"nodename": "END",
-	"state":"The barista handed [victim.name] a bunch of napkins and gave [victim.name] a free drink out of sympathy."
+	"state":"The barista handed [victim.name] a napkin and gave [victim.name] a free drink out of sympathy."
 	}
 
 }

@@ -5,26 +5,43 @@ from numpy import random
 QUESTION_PR = 0.6
 FILLER_QUESTION_PR = 0.3
 
+SCHEMA_FILE_PATH="fight.schema"
+STATES_FILE_PATH="fight.states"
 
 
 """ 
 
+- CURRENT IMPLEMENTATION
+Graph and Experiment
+Graph has Node objects
+Experiment has Question objects
+
+RFC is a dict, RF are dicts
+
+
+- NEXT STEP
+
+richly filled experiments
+1 work on Node object to make filling smooth
+2 make sure questions are being easily filled
+
+
+- NOTES
+
 RFC
-need to implement RFC object with get_info method which 
-returns a string containing the information about the entities in that RFC
+want .get_info() returns str with info about the entities in RFC
+.query(condition) returns true or false.
+currently encoding as a string with the info of role.property.bool
+
 
 PR 
-currently node.pr is {subj.viol.true:{nodename:pr,}, subj.viol.false:{nodename:pr,}}
+node.pr is {subj.viol.true:{nodename:pr,}, subj.viol.false:{nodename:pr,}}
 
 want: pr and RFC interact better for querying 
 
-query method:
-RFC.query(condition) returns true or false 
-currently encoding as a string with the infor of role.property.bool
 
-NEURAL NET INTEGRATION
-
-assymetry in str(node)=nodeobj.BEGIN 
+assymetry:
+      str(node)=nodeobj.BEGIN 
   and str(question)=transQ_SHOVE 
   and str(RFC)=subj.bill.vict.olivia
 
@@ -42,6 +59,7 @@ class RFC(dict):
 
   def __str__(self):
     """ returns a string that uniquely identifies this RFC 
+        i think this is used to keep track of RFCs in experiment
         e.g. subject-bill_victim-jane 
     """
     return "-".join(["%s.%s" %(k,self[k]['name']) for k in self.keys()]).lower()
@@ -67,6 +85,7 @@ def make_RFC_bag():
 
 ## helper methods
 
+
 def read_json(path):
   """ load schema files"""
   with open(path) as f:
@@ -74,48 +93,7 @@ def read_json(path):
   return schema_info_L
 
 
-## graph constructor 
-
-
-def assemble_pr(pr_info,nodeD):
-  """ given string that encodes trans_prob information 
-      in schema file, return a pr object 
-      e.g. {subj.viol.true: {tonode1:0.3,tonode2:0.7}, } 
-      currently just changes keys of inner dict from string to node """
-  pr = {}
-  for cond,cond_dist in pr_info.items():
-    pr[cond] = {}
-    for tonode_name,probability in cond_dist.items():
-      tonode = nodeD[tonode_name]
-      pr[cond][tonode] = probability
-  return pr
-
-""" eventually* break this into two functions: 
-init_nodeD and another function for giving extra structure to the graph
-"""
-
-def make_nodeD(path1="fight.schema",path2="fight.states"):
-  """ graph constructor 
-      returns nodeD {nodename:node}
-  """
-  schema_info_D = read_json(path1)
-  node_state_D = read_json(path2)
-
-  ## initialize nodeD with nodes containing name and state
-  nodeD = {}
-  for node_name in node_state_D.keys():
-    node_state = node_state_D[node_name]['state']
-    nodeD[node_name] = Node(name=node_name, state=node_state)
-
-  ## include pr in nodes
-  for fromnode_name,node_info in schema_info_D.items():
-    fromnode = nodeD[fromnode_name]
-    fromnode.pr = assemble_pr(node_info['pr'],nodeD)
-  return nodeD
-
-
-
-## basic objects: nodes, questions
+### GRAPH
 
 
 class Node():
@@ -144,10 +122,27 @@ class Node():
       visible_role_props.append({'role': role, 'prop': prop})
     return visible_role_props
 
+  """ use node.get_filled_state(RFC) here """
+  def check_filled_states_differ(self,RFC1,RFC2):
+    """ if the node's output sentences look different
+        under the two RFCs, return True 
+        NB currently, name is only surface property that 
+        differs between RFCs. therefore i only check if 
+        different names are produced. in the furture RFCs
+        should have latent and visible properties and this 
+        function would differentiate between them """
+    # list of (role,property) tuples in self.state
+    roleprop_L = [rp[1:-1].split('.') for rp in re.findall('\[.*?\]',self.state)]
+    for rp_tup in roleprop_L:
+      role,prop = rp_tup
+      if RFC1[role]['name'] != RFC2[role]['name']:
+        return True
+    return False
+
   def get_cond_dist(self,RFC):
-    """ given an RFC which establishes which conditions are met
+    """ given an RFC, which establishes which conditions are met,
         returns a conditional distribution over outgoing edges.
-        NB currently only two conditions guide transition probabilities
+        NB currently only one role.property changes transition probabilities
       """
     if RFC['subject']['violent']:
       cond_dist =  self.pr['subject.violent.true']
@@ -155,6 +150,8 @@ class Node():
       cond_dist =  self.pr['subject.violent.false']
     return cond_dist
   
+  """ currently only filling subject name and victim name
+  need to detect what needs filling and fill"""
   def get_filled_state(self,RFC):
     """ 
         replace [role.property] substrings of state with RFC[role][property]
@@ -171,12 +168,47 @@ class Node():
     return filled_state
 
 
+## graph constructing: graph is just a dict of nodes
+
+def assemble_pr(pr_info,nodeD):
+  """ given string that encodes trans_prob information in schema file, 
+      return a pr object. e.g. {subj.viol.true: {tonode1:0.3,tonode2:0.7}, } 
+      currently just changes keys of inner dict from string "tonode1" to node object """
+  pr = {}
+  for cond,cond_dist in pr_info.items():
+    pr[cond] = {}
+    for tonode_name,probability in cond_dist.items():
+      tonode = nodeD[tonode_name]
+      pr[cond][tonode] = probability
+  return pr
 
 
-""" 
-two types of questions
-implemented with inheritance: b/c of common attributes between qtypes
-"""
+def make_nodeD(schema_fpath=SCHEMA_FILE_PATH,states_fpath=STATES_FILE_PATH):
+  """ graph constructor 
+    returns nodeD {nodename:node}
+
+      break this into two functions?
+    init_nodeD and another function for giving extra structure to the graph
+  """
+  schema_info_D = read_json(schema_fpath)
+  node_state_D = read_json(states_fpath)
+
+  ## initialize nodeD with nodes containing name and state
+  nodeD = {}
+  for node_name in node_state_D.keys():
+    node_state = node_state_D[node_name]['state']
+    nodeD[node_name] = Node(name=node_name, state=node_state)
+
+  ## include pr in nodes
+  for fromnode_name,node_info in schema_info_D.items():
+    fromnode = nodeD[fromnode_name]
+    fromnode.pr = assemble_pr(node_info['pr'],nodeD)
+  return nodeD
+
+
+
+### EXPERIMENT
+
 
 class Question():
   """ qinfo contains fromnode,tonode,RFC 
@@ -240,7 +272,7 @@ class Exp():
     self.nodes = nodeD # {nodename:node}
     self.RFC_bag = RFC_bag
     self.fixed_RFC = random.choice(self.RFC_bag)
-    
+
   def get_next_tonode(self,fromnode,RFC):
     """ using current RFC uses conditional distribution of fromnode
         to return next tonode """
@@ -251,29 +283,27 @@ class Exp():
   ## main
 
   def gen_path(self,prQ=QUESTION_PR):
-    """ assembles a single path object:
-        currently a list of nodes and questions
-        path object would consist of collection of nodes and an RFC
+    """ assembles a single path object: sequence of nodes and questions
         RFC used for collapsing transition probabilities and later filling states
     """
     # sample True RFC
     RFC = random.choice(self.RFC_bag)
     # start at Begin node
-    node = self.nodes['BEGIN']
-    path_nodes = [node]
-    while node.name != "END":
+    frnode = self.nodes['BEGIN']
+    node_seq = [frnode]
+    while frnode.name != "END":
       # get next tonode
       # self.fixed_RFC used for unconditioned transitions
-      next_tonode = self.get_next_tonode(node,self.fixed_RFC)
+      next_tonode = self.get_next_tonode(frnode,RFC)
       # w.p. prQ ask question
       if (random.random() < prQ):
-        question = self.get_question(node,next_tonode,RFC) # returns Question or None 
+        question = self.get_question(frnode,next_tonode,RFC) # returns Question or None 
         if question:
-          path_nodes.append(question)
+          node_seq.append(question)
       # collect node and walk
-      node = next_tonode
-      path_nodes.append(node)
-    return path_nodes,RFC
+      frnode = next_tonode
+      node_seq.append(frnode)
+    return node_seq,RFC
 
   """ 
   Question methods 
@@ -293,7 +323,6 @@ class Exp():
       question = self.get_transition_question(fromnode,tonode,RFC)
     return question
 
-
   def get_filler_question(self,fromnode,tonode,true_RFC):
     """ fillerQ: same tonode, false_RFC
         check if a valid filler question exists 
@@ -304,11 +333,10 @@ class Exp():
     random.shuffle(self.RFC_bag)
     # look for RFC which produces different filled sentences for tonode
     for false_RFC in self.RFC_bag:
-      if tonode.get_filled_state(true_RFC) != tonode.get_filled_state(false_RFC):
+      if tonode.check_filled_states_differ(true_RFC,false_RFC):
         return FillerQ(fromnode=fromnode,true_tonode=tonode,
                        true_RFC=true_RFC,false_RFC=false_RFC)
     return None
-    
 
   def get_transition_question(self,fromnode,true_tonode,true_RFC):
     """ transitionQ: false_tonode, same RFC
@@ -326,7 +354,6 @@ class Exp():
       question = TransitionQ(fromnode=fromnode,true_tonode=true_tonode,
                               true_RFC=true_RFC,false_tonode=false_tonode)
     return question
-  
 
   # wrapper 
 
@@ -338,4 +365,15 @@ class Exp():
       path_L.append(path)
       RFC_L.append(RFC)
     return path_L,RFC_L
+
+
+
+
+
+
+
+
+
+
+
 
