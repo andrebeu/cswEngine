@@ -1,0 +1,95 @@
+ {
+
+"BEGIN": {
+	"pr": {
+		"subject.violent.true": {"CUTLINE": 0.8, "STEPFOOT": 0.2},
+		"subject.violent.false": {"CUTLINE": 0.2, "STEPFOOT":0.8}}
+	},
+
+
+"CUTLINE": {
+	"pr": {
+		"subject.violent.true": {"CUTBACK" : 1.0},
+		"subject.violent.false": {"CUTBACK": 1.0}}
+	},
+"CUTBACK": {
+	"pr": {
+		"subject.violent.true": {"SUBJREACTS": 0.8, "SUBJECTSTARES": 0.2},
+		"subject.violent.false": {"SUBJREACTS": 0.2, "SUBJECTSTARES": 0.8}}
+	},
+
+
+"STEPFOOT": {
+	"pr": {
+		"subject.violent.true": {"EXCUSEME": 1.0},
+		"subject.violent.false": {"EXCUSEME": 1.0}}
+	},
+"EXCUSEME": {
+	"pr": {"subject.violent.true": {"SUBJREACTS": 0.8, "SUBJECTSTARES": 0.2},
+		   "subject.violent.false": {"SUBJREACTS": 0.2, "SUBJECTSTARES": 0.8}}
+	},
+
+
+"SUBJREACTS": {
+	"pr": {"subject.violent.true": {"YELL": 0.2, "XSHOVE": 0.8},
+		   "subject.violent.false": {"YELL": 0.8, "XSHOVE": 0.2}}
+	},
+"SUBJECTSTARES": {
+	"pr": {"subject.violent.true": {"YELL": 0.2, "XSHOVE": 0.8},
+		   "subject.violent.false": {"YELL": 0.8, "XSHOVE": 0.2}}
+	},
+
+
+"YELL": {
+	"pr": {
+		"subject.violent.true": {"SUBJFINALTWO": 0.2, "SUBJFINALONE": 0.8},
+		"subject.violent.false": {"SUBJFINALTWO": 0.8, "SUBJFINALONE": 0.2}}
+	},
+"XSHOVE": {
+	"pr": {
+		"subject.violent.true": {"SUBJFINALTWO": 0.2, "SUBJFINALONE": 0.8},
+		"subject.violent.false": {"SUBJFINALTWO": 0.8, "SUBJFINALONE": 0.2}}
+	},
+
+
+"SUBJFINALONE": {
+	"pr": {
+		"subject.violent.true": {"POLICEORDERS": 0.8, "BARISTAORDERS": 0.2},
+		"subject.violent.false": {"POLICEORDERS": 0.2, "BARISTAORDERS": 0.8}
+		}
+	},
+"SUBJFINALTWO": {
+	"pr": {
+		"subject.violent.true": {"POLICEORDERS": 0.8, "BARISTAORDERS": 0.2},
+		"subject.violent.false": {"POLICEORDERS": 0.2, "BARISTAORDERS": 0.8}
+		}
+	},
+
+
+"POLICEORDERS": {
+	"pr": {"subject.violent.true": {"LOVEJUICE": 0.8, "HATECOFFEE": 0.2},
+		   "subject.violent.false": {"LOVEJUICE": 0.2, "HATECOFFEE": 0.8}}
+	},
+"BARISTAORDERS": {
+	"pr": {
+		"subject.violent.true": {"LOVEJUICE": 0.8, "HATECOFFEE": 0.2},
+		"subject.violent.false": {"LOVEJUICE": 0.2, "HATECOFFEE": 0.8}}
+	},
+
+
+"LOVEJUICE": {
+	"pr": {"subject.violent.true": {"END": 1.0},
+			"subject.violent.false": {"END": 1.0}}
+	},
+"HATECOFFEE": {
+	"pr": {
+		"subject.violent.true": {"END": 1.0},
+		"subject.violent.false": {"END": 1.0}}
+	},
+
+
+"END":{
+	"pr": {}
+	}
+
+}

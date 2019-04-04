@@ -13,25 +13,27 @@
 	"person1": {
 		"name":"Bill",
 		"violent":true,
-		"emotion":"rage",
+		"emotion":"outraged",
 		"yell":"I hate coffee!",
-		"type":"nurse"
+		"type":"local nurse"
 		},
 	"person2": {
 		"name":"Silvia",
 		"violent":true,
-		"emotion":"rage2",
+		"emotion":"horrified",
 		"yell":"I hate coffee2!",
-		"type":"doctor"
+		"type":"foreign doctor"
 		},
 
 	"person3": {
 		"name":"Adam",
-		"violent":true
+		"violent":true,
+		"stepfootmotive":"Clumsily"
 		},
 	"person4": {
 		"name":"Olivia",
-		"violent":false
+		"violent":false,
+		"stepfootmotive":"Clumsily"
 		},
 
 

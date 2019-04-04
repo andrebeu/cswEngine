@@ -2,12 +2,12 @@
 
 "BEGIN": {
 	"nodename": "BEGIN",
-	"state": "One morning, [subject.name] walked into [setting.name]."
+	"state": "One morning, [subject.name] walked into the coffee shop."
 	},
 
 "CUTLINE": {
 	"nodename": "CUTLINE",
-	"state":"[subject.name] cut [victim.name], the local [victim.type]."
+	"state":"[subject.name] cut [victim.name], who was first in line."
 	},
 "STEPFOOT": {
 	"nodename": "STEPFOOT",
@@ -21,7 +21,7 @@
 	},
 "EXCUSEME": {
 	"nodename": "EXCUSEME",
-	"state":"[victim.name] was [victim.emotion] and said, 'Excuse me?!"
+	"state":"[victim.name] was enraged and said, 'Excuse me?!"
 	},
 
 
@@ -45,17 +45,17 @@
 	},
 "YELL": {
 	"nodename": "YELL",
-	"state": "[victim.name] yelled, '[victim.yell]'"
+	"state": "[victim.name] yelled, 'Hey! Relax.'"
 	},
 
 
 "DRINKSPLASH": {
 	"nodename": "DRINKSPLASH",
-	"state":"[subject.name] splashed a [drink1.name] into [victim.name]'s face."
+	"state":"[subject.name] splashed a coffee into [victim.name]'s face."
 	},
 "DESERTCRUMBLE": {
 	"nodename": "DESERTCRUMBLE",
-	"state":"[subject.name] crumbled a [dessert.name] above [victim.name]'s head."
+	"state":"[subject.name] crumbled a muffin above [victim.name]'s head."
 	},
 
 
@@ -71,11 +71,11 @@
 
 "LOVEJUICE": {
 	"nodename": "LOVEJUICE",
-	"state":"[subject.name] ran out yelling '[drink3.name] is better, anyway!'"
+	"state":"[subject.name] ran out yelling 'Juice is better, anyway!'"
 	},
 "HATECOFFEE": {
 	"nodename": "HATECOFFEE",
-	"state":"[subject.name] stormed out yelling 'I hate [drink2.name]!"
+	"state":"[subject.name] stormed out yelling 'I hate coffee!"
 	},
 
 

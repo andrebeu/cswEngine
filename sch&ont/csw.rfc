@@ -1,0 +1,135 @@
+{
+	"subject": [
+		{
+		"name": "Alice",
+		"pronoun": "she",
+		"pronoun2": "her",
+		"latent": true
+		},
+		{
+		"name": "Bill",
+		"pronoun": "he",
+		"pronoun2": "his",
+		"latent": false
+		}
+	],
+
+	"location": [
+		{
+		"name": "deep ocean cafe",
+		"time": "fine morning",
+		"latent": true
+		},
+		{
+		"name": "jungle brew house ",
+		"time": "strange evening",
+		"latent": false
+		}
+	],
+
+	"drink": [
+		{
+		"name": "green drink"
+		},
+		{
+		"name": "red drink"
+		}
+	],
+
+	"basement": [
+		{
+		"name": "skeletons"
+		},
+		{
+		"name": "stuffed crows"
+		}
+	],
+
+	"notice": [
+		{
+		"this": "a man with a face tattoo"
+		},
+		{
+		"this": "a pirate with no sword"
+		}
+	],
+
+	"overhear": [
+		{
+		"this": "a bad pickup line"
+		},
+		{
+		"this": "someone yelling math equations"
+		}
+	],
+
+	"radio": [
+		{
+		"broadcast": "tunes from the 80s"
+		},
+		{
+		"broadcast": "really bad music"
+		}
+	],
+
+	"music": [
+		{
+		"title": "a symphony"
+		},
+		{
+		"title": "a guitar solo"
+		}
+	],
+
+	"dance": [
+		{
+		"name": "the circle dance"
+		},
+		{
+		"name": "the samba"
+		}
+	],
+
+	"subjdeed": [
+		{
+		"this": "hid under the bar"
+		},
+		{
+		"this": "yelled in seven languages"
+		}
+	],
+
+	"barista": [
+		{
+		"deed": "dumping a bucket of water"
+		},
+		{
+		"deed": "throwing banana peels"
+		}
+	],
+
+	"cops": [
+		{
+		"deed": "to spectate"
+		},
+		{
+		"deed": "to join along"
+		}
+	],
+	"food": [
+		{
+		"name": "blueberry pie"
+		},
+		{
+		"name": "apple crumble"
+		}
+	],
+	"taken": [
+		{
+		"object": "salt shaker"
+		},
+		{
+		"object": "empty pitcher"
+		}
+	]
+}

@@ -65,8 +65,9 @@
 	},
 "DESERTCRUMBLE": {
 	"pr": {
-		"subject.violent.true": {"POLICEORDERS": 0.2, "BARISTAORDERS": 0.8},
-		"subject.violent.false": {"POLICEORDERS": 0.8, "BARISTAORDERS": 0.2}}
+		"subject.violent.true": {"POLICEORDERS": 0.8, "BARISTAORDERS": 0.2},
+		"subject.violent.false": {"POLICEORDERS": 0.2, "BARISTAORDERS": 0.8}
+		}
 	},
 
 

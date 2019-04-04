@@ -3,46 +3,60 @@ import json
 from numpy import random
 import itertools
 
-
-BLOCK_LEN = 1
-QUESTION_PR = 1.0
-FILLER_QUESTION_PR = 0.25
-NUM_BURNIN = 0
-CONDITIONED = True
+QUESTION_PR = 0.6
+FILLER_QUESTION_PR = 0.15
+CONDITIONED = False
+NUM_BURNIN = 5
 
 # see experiment for more options
-SCH_FPATH="csw1000_multiname_loctransition.sch"
-RFC_FPATH='csw_multiname_loctransition.rfc'
+SCH_FPATH="csw_condloc.sch"
+RFC_FPATH='csw.rfc'
 
 PARAMS = [QUESTION_PR,FILLER_QUESTION_PR,CONDITIONED,NUM_BURNIN,SCH_FPATH,RFC_FPATH]
 
-
-
-
 """ NOTES
+  
+how does learning regime interact with structure of graph to be learned? blocked-interleaved continuum
 
-unconditioned graphs currently implemented as:
-  randomly sampling a condition at the time of graph creation
-  this will not work with two or more conditioning factors
-  this was done instead of just picking first condition in every edges 
-    because i wanted to randomize which condition got picked between subjects
-    however, this might be unnecessary because graph is fully balanced 
-    i.e. every node is visited the same proportions
-
+features of current paradigm that could make generative structure more complex: 
+	higher filler complexity, multistep dependence, multiple conditioning factors, 
+	wider layers, independent tracks, 
 
 currently there is a fine distinction between 'edge' and 'edges'.
   edges = {cond:edge,cond:edge}
   edge = {tonode1:pr,tonode2:pr}
 
-careful with 'cond' as it might refer to the conditioning factor for a given
-  transition but it might also refer to the condition satisfied in a given
-  block in blocked learning
+---
 
-pass conditioning as arg to graph constructor
+- immediate next: run N=3 on exp1
+launch N=3 to check data is being recorded
+launch N=27 analyze learning
+conditioning experiment
+launch N=3 to check data is being recorded
+launch N=27 analyze learning
+change schema to subj and loc cond
+launch N=3 to check data is being recorded
+launch N=27 analyze learning
+
+- next: code up blocking
+
+---
 
 
+MURI deadline 19 aug (~ 3 weeks)
+
+exp1: unconditioned
+exp2: conditioned on location only. 
+exp3: cond on subj and loc
+exp4: blocking
+
+
+block versus interleaved functionality
+integrate human-networks
 
 """
+
+
 
 
 ### helper methods
@@ -121,7 +135,7 @@ class RFC(dict):
 
   def assert_roles_differ(self,other_rfc,role):
     """
-    given a role (e.g. subject), return True if self and other rfc have different values for that role
+    given a role, check if self and other rfc have same value for that role
     """
     other_role = other_rfc[role]
     self_role = self[role]
@@ -160,7 +174,7 @@ class Ontology(list):
 
   def sample_rfc(self,cond=None):
     """ samples RFC from ontology 
-    if condition 'role.property.value' is specified, samples from subset of ontology
+    if condition is specified, samples from subset of ontology
       that satisfies condition
     if no condition is specified, samples from full ontology
       required because np.random.choice(ont) does not work 
@@ -179,14 +193,13 @@ class Ontology(list):
 
 
 
-
 class Graph():
 
 
-  def __init__(self,conditioned=CONDITIONED, schfile_path=SCH_FPATH):
+  def __init__(self,schfile_path=SCH_FPATH):
     self.sch_fpath = schfile_path
     self.schfile_dict = read_json(schfile_path)
-    self.conditioned = conditioned
+    self.conditioned = CONDITIONED
     if not self.conditioned:
       self.random_condition = random.choice(get_all_edge_conditions(self.schfile_dict))
     # initialize_nodes
@@ -235,12 +248,10 @@ class Graph():
     # unconditioned
     else:
       edge['uncond'] = {}
-      # use this for uncond when graph has multiple conditioning factors
-      # cond_dist = list(edge_info.values())[0] 
       cond_dist = edge_info[self.random_condition]
       for tonode_name,probability in cond_dist.items():
-        tonode = self.node_dict[tonode_name]
-        edge['uncond'][tonode] = probability
+          tonode = self.node_dict[tonode_name]
+          edge['uncond'][tonode] = probability
     return edge
 
   def get_edge(self,frnode,rfc):
@@ -259,7 +270,6 @@ class Graph():
           break
       else:
         assert False,'Failed to find edge. No conditions in edge met.'
-    # if unconditioned, ignore passed rfc
     else:
       assert len(edges) == 1, 'assuming unconditioned but found more than one condition'
       edge = edges['uncond'] 
@@ -377,46 +387,31 @@ class Exp():
     self.graph = graph # {nodename:node}
     self.ont = ont
     self.askingQ = False # used for burnin period
-    self.testing = False
 
   ## main
 
-  def gen_path(self,rfc_cond=None):
-    """ assembles a path 
-    when rfc_cond==None
+  def gen_path(self,cond=None,qpr=QUESTION_PR):
+    """ assembles a path [node,question,]
     """
     # sample filling rfc from ontology 
-    rfc = self.ont.sample_rfc(rfc_cond)
+    rfc = self.ont.sample_rfc(cond)
     # start at Begin node
     frnode = self.graph.node_dict['BEGIN']
     path = [frnode]
     while frnode.name != "END":
       # draw next tonode
       next_tonode = self.graph.sample_tonode(frnode,rfc) 
-      if next_tonode.name == "END": break
-      ## question asking
-      if self.assert_ask_question(frnode):
+      # w.p. qpr ask question
+      if (random.random() < qpr) and self.askingQ:
         question = self.get_question(frnode,next_tonode,rfc) # returns Question or None 
         if question:
           path.append(question)
       # collect node and walk
       frnode = next_tonode
       path.append(frnode)
-    # append END node
-    path.append(next_tonode)
     return path,rfc
 
-  def assert_ask_question(self,frnode):
-    # don't ask during testing
-    if self.testing and frnode.name == 'BEGIN':
-      return False
-    # don't ask .5 transition
-    if (frnode.name[:7] == 'LOCNODE'):
-      return False
-    # ask
-    if (random.random() < QUESTION_PR) and (self.askingQ):
-      return True
-  
+
   # Question methods 
 
   def get_question(self,frnode,tonode,rfc):
@@ -433,23 +428,11 @@ class Exp():
       question = self.get_transition_question(frnode,tonode,rfc)
     return question
 
-  def assert_valid_filler_question(self,tonode,rfc1,rfc2):
-    """ returns true if valid filler question
-    for now filler questions are those where the sentence produced
-    by tonode under the two rfc's explicitly mention about different subjects
-    """
-    if 'subject.name' in tonode.sent\
-      and tonode.assert_sents_differ(rfc1,rfc2)\
-      and rfc1.assert_roles_differ(rfc2,'subject'):
-      return True 
-    else:
-      return False
-
-
   def get_filler_question(self,frnode,tonode,true_rfc):
     """ fillerQ: same tonode, false_rfc (different subject)
-    check if a valid filler question exists by looking for a false rfc 
-    which gives a different sentence and which has a different subject
+    check if a valid filler question exists 
+    by looking for a false rfc which 
+    gives a different sentence and which has a different subject
     if exits, return question, else return None
     """
     if frnode.name == "BEGIN": 
@@ -457,7 +440,9 @@ class Exp():
     random.shuffle(self.ont._list)
     # look for rfc which produces sentences filled with different subjects
     for false_rfc in self.ont._list:
-      if self.assert_valid_filler_question(tonode,true_rfc,false_rfc):
+
+      if tonode.assert_sents_differ(true_rfc,false_rfc)\
+      and true_rfc.assert_roles_differ(false_rfc,'subject'):
         return FillerQ(frnode=frnode,true_tonode=tonode,
                        true_rfc=true_rfc,false_rfc=false_rfc)
     return None
@@ -482,56 +467,23 @@ class Exp():
 
   # wrapper: controls blocking
 
-  def gen_k_paths_blocked(self,num_paths,blocking_factor='location.latent',block_len=BLOCK_LEN,qblock_len=10):
-    """ 
+  def gen_k_paths(self,num_paths,cond_L=[None]):
+    """ cond controls ont-blocking, set to none for no blocking
     """
-    self.askingQ = True 
+    self.askingQ = False 
     path_L,rfc_L = [],[]
-    bfL = [blocking_factor+'.true',blocking_factor+'.false']
-    random.shuffle(bfL)
+
     for path_num in range(num_paths):
-      # alternating blocking factors
-      if path_num%(block_len)==0: 
-        bfL.reverse()
-      block_rfc_cond = bfL[0]
+      # burnin
+      if path_num == NUM_BURNIN: 
+        self.askingQ = True
+      # if blocking
+      cond = None
       # generate path and moveon
-      path,rfc = self.gen_path(rfc_cond=block_rfc_cond) 
+      path,rfc = self.gen_path(cond) # for no blocking set cond=None
       path_L.append(path)
       rfc_L.append(rfc)
     return path_L,rfc_L
-
-  def gen_k_paths_randomized(self,num_paths,blocking_factor='location.latent'):
-    """ 
-    wrapper for controling blocking
-    """
-    # initializations
-    path_L,rfc_L = [],[]
-    bfL = [blocking_factor+'.true',blocking_factor+'.false']
-    for path_num in range(num_paths):
-      # random rfc
-      rfc_cond = random.choice(bfL)
-      # generate path and moveon
-      path,rfc = self.gen_path(rfc_cond=rfc_cond) 
-      path_L.append(path)
-      rfc_L.append(rfc)
-    return path_L,rfc_L
-
-  def gen_k_paths(self,num_paths):
-    """ 
-    wrapper for above two
-    """
-    num_train_paths = int((4/5)*num_paths)
-    num_test_paths = int((1/5)*num_paths)
-    # training paths
-    self.testing = False
-    pathL,rfcL = self.gen_k_paths_blocked(num_train_paths,block_len=BLOCK_LEN)
-    # testing paths
-    self.testing = True
-    te_pathL,te_rfcL = self.gen_k_paths_randomized(num_test_paths)
-    pathL.extend(te_pathL)
-    rfcL.extend(te_rfcL)
-    return pathL,rfcL
-    
 
 
 

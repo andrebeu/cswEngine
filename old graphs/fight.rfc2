@@ -1,0 +1,147 @@
+{
+
+"subject":[
+	{
+		"name":"Alice",
+		"pronoun":"she",
+		"violent":false
+		},
+	{
+		"name":"Bill",
+		"pronoun":"he",
+		"violent":true
+		}
+	],
+
+"victim":[
+	{
+		"name":"Claire",
+		"pronoun":"she"
+		},
+	{
+		"name":"David",
+		"pronoun":"he"
+		}
+	],
+
+"location":[
+	{
+		"name": "coffee shop",
+		"time": "morning"
+		},
+	{
+		"name": "book store",
+		"time": "afternoon"
+		}
+	],
+
+"subjinspiration":[
+	{
+		"source":"by the afternoon's heat"
+		},
+	{
+		"source":"and wearing a pink top hat"
+		}
+	],
+
+"subjdeed":[
+	{
+		"verb":"sneezed",
+		"object":"pinky finger"
+		},
+	{
+		"verb":"spilled coffee",
+		"object":"brand-new tuxedo"
+		}
+	],
+
+"book":[
+	{
+		"author":"Nietzsche",
+		"title":"'Thus Spoke Zarathustra'"
+		},
+	{
+		"author":"Sartre",
+		"title":"'Nausea'"
+		}
+	],
+
+"victresp":[
+	{
+		"valence":"was furious",
+		"action":"invented many words there and then",
+		"description":"gave up the frenzy"
+		},
+	{
+		"valence":"had just returned from yoga",
+		"action":"paced around forcefully thinking 'Namaste! Namaste!'",
+		"description":"realized things were Real and True"
+		}
+	],
+
+"subjreact":[
+	{
+		"name":"just shoved"
+		},
+	{
+		"name":"began running around"
+		}
+	],
+
+
+"subjstare":[
+	{
+		"adverb":" curiously at",
+		"noun":"rebellion"
+		},
+	{
+		"adverb":", fascinated by",
+		"noun":"display"
+		}
+	],
+
+"victattack":[
+	{
+		"deed":"considered using those kong-fu skills"
+		},
+	{
+		"deed":"began lecturing on the motions of the stars"
+		}
+	],
+
+
+
+"victyell":[
+	{
+		"valence":"appalled",
+		"content":"Really? is that all you can muster?"
+		},
+	{
+		"valence":"amused",
+		"content":"Stop! Or I'll ride my unicorns into the sunset."
+		}
+	],
+
+"subjfinalone":[
+	{
+		"deed":"chugged down three cups of moccachino"
+		},
+	{
+		"deed":"pulled out a straw and a collection of spitballs"
+		}
+	],
+
+"subjfinaltwo":[
+	{
+		"deed":"pulled out the violin"
+		},
+	{
+		"deed":"began professing Aristotelian ethics"
+		}
+	]
+
+}
+
+
+
+

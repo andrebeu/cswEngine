@@ -1,0 +1,119 @@
+{
+	"subject": [
+		{
+		"name": "Alice",
+		"pronoun": "she",
+		"pospronoun": "her",
+		"latent": true
+		},
+		{
+		"name": "Bill",
+		"pronoun": "he",
+		"pospronoun": "his",
+		"latent": false
+		}
+	],
+
+	"location": [
+		{
+		"name": "drinks shop",
+		"time": "fine morning",
+		"latent": true
+		},
+		{
+		"name": "brew house",
+		"time": "strange evening",
+		"latent": false
+		}
+	],
+
+	"drink": [
+		{
+		"name": "muddy water"
+		},
+		{
+		"name": "silk potion"
+		}
+	],
+
+	"basement": [
+		{
+		"name": "skeletons"
+		},
+		{
+		"name": "a dance party"
+		}
+	],
+
+	"realize": [
+		{
+		"this": "Maybe in the library!"
+		},
+		{
+		"this": "The cat is not what it seems!"
+		},
+		{
+		"this": "Old Reilly stole that stallion!"
+		}
+	],
+
+	"see": [
+		{
+		"this": "Einstein drinking coffee?"
+		},
+		{
+		"this": "a real life zombie?"
+		},
+		{
+		"this": "that the mirrors are labyrinths?"
+		}
+	],
+
+	"broadcast": [
+		{
+		"this": "rain then sun then rain then sun ..."
+		},
+		{
+		"this": "and receive at your finger tip ..."
+		},
+		{
+		"this": "the established science of unicorns ..."
+		}
+	],
+
+	"eventuality": [
+		{
+		"this": "the panda's top hat did flatten."
+		},
+		{
+		"this": "the walls became geometric shapes."
+		},
+		{
+		"this": "it all became unclear."
+		}
+	],
+
+	"saying1": [
+		{
+		"this": "all we could ever know!"
+		},
+		{
+		"this": "that which is never Real and True!"
+		},
+		{
+		"this": "the middle and the end of reality!"
+		}
+	],
+
+	"saying2": [
+		{
+		"this": "our own."
+		},
+		{
+		"this": "a dreamed self."
+		},
+		{
+		"this": "a transparent identity."
+		}
+	]
+}

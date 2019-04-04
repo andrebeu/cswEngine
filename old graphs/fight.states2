@@ -1,0 +1,99 @@
+{
+
+"BEGIN": {
+	"nodename": "BEGIN",
+	"description":"subj walks into location",
+	"state": "One [location.time], [subject.name] walked into the [location.name]."
+	},
+
+
+ "CUTLINE": {
+	"nodename": "CUTLINE",
+	"description":"subj is inspired and cuts line",
+	"layer": "1a subj acts",
+	"state":"Inspired [subjinspiration.source], [subject.name] cut the line"
+	},
+"STEPFOOT": {
+	"nodename": "STEPFOOT",
+	"description": "subject is clumsy and sneezes or spills coffee",
+	"layer": "1a subj acts",
+	"state":"While in line, [subject.name] clumsily [subjdeed.verb] on [victim.name]'s [subjdeed.object]."
+	},
+
+
+"CUTBACK": {
+	"nodename": "CUTBACK",
+	"layer": "1b vict reacts",
+	"description": "victim takes action against unfair subject",
+	"state":"Having just read [book.author]'s [book.title], [victim.name], who was in line,  would not let this pass!"
+	},
+"EXCUSEME": {
+	"nodename": "EXCUSEME",
+	"layer": "1b vict reacts",
+	"description": "victim overreacts to a clumsy subject",
+	"state":"[victim.name] [victresp.valence]: [victim.pronoun] [victresp.action]."
+	},
+
+
+"SUBJREACTS": {
+	"nodename": "SUBJREACTS",
+	"layer":"2 subj reacts",
+	"description": "subj shoves or runs around vict who just reacted",
+	"state":"Unanounced, [subject.name] [subjreact.name] [victim.name] until [victim.name] [victresp.description]."
+	},
+"SUBJECTSTARES": {
+	"nodename": "SUBJECTSTARES",
+	"layer":"2 subj reacts",
+	"description": "subj stares at vict doing something crazy",
+	"state":"[subject.name] just stared[subjstare.adverb] [victim.name]'s [subjstare.noun]."
+	},
+
+
+"XSHOVE": {
+	"nodename": "XSHOVE",
+	"layer":"vict attacks",
+	"state": "[victim.name] [victattack.deed] to calm [subject.name] down."
+	},
+"YELL": {
+	"nodename": "YELL",
+	"layer":"vict provokes",
+	"state": "[victim.name] was [victyell.valence]! '[victyell.content].'"
+	},
+
+
+"SUBJFINALONE": {
+	"nodename": "SUBJFINALONE",
+	"state":"[subject.name] immediately [subjfinalone.deed]."
+	},
+"SUBJFINALTWO": {
+	"nodename": "SUBJFINALTWO",
+	"state":"[subject.name] was completely still, when suddenly [subject.pronoun] [subjfinaltwo.deed]."
+	},
+
+
+"POLICEORDERS": {
+	"nodename": "POLICEORDERS",
+	"state":"That was when the bystanding police officer ordered [subject.name] to leave."
+	},
+"BARISTAORDERS": {
+	"nodename": "BARISTAORDERS",
+	"state":"We all saw the barista order [subject.name] to leave. "
+	},
+
+
+"LOVEJUICE": {
+	"nodename": "LOVEJUICE",
+	"state":"[subject.name] ran out yelling 'Juice is better, anyway!'"
+	},
+"HATECOFFEE": {
+	"nodename": "HATECOFFEE",
+	"state":"Calmly [subject.name] walked out, muttering something left unheard."
+	},
+
+
+"END": {
+	"nodename": "END",
+	"state":"All else is unknown."
+	}
+
+}
