@@ -1,3 +1,6 @@
+### This is the first version which found a difference between interleaved and blocked learning. In the current implementation curriculum is controlled by the number of stories within a block. In the next implementation, curriculum will be controlled by the probability of staying versus shifting.
+
+
 # cswEngine
 
 
